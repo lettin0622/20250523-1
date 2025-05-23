@@ -32,6 +32,7 @@ function draw() {
 
   if (predictions.length > 0) {
     const keypoints = predictions[0].scaledMesh;
+    const mirrorX = x => width - x;
 
     // 先畫第一組紅色線（嘴巴閉合）
     stroke(255, 0, 0);
@@ -41,43 +42,41 @@ function draw() {
     for (let i = 0; i < indices.length; i++) {
       const idx = indices[i];
       const [x, y] = keypoints[idx];
-      vertex(x, y);
+      vertex(mirrorX(x), y);
     }
     endShape(CLOSE);
 
-    // 再畫第二組紅色線並填滿黃色
+    // 第二組紅色線並填滿黃色
     stroke(255, 0, 0);
     strokeWeight(2);
-    fill(255, 255, 0, 200); // 半透明黃色
+    fill(255, 255, 0, 200);
     beginShape();
     for (let i = 0; i < indices2.length; i++) {
       const idx = indices2[i];
       const [x, y] = keypoints[idx];
-      vertex(x, y);
+      vertex(mirrorX(x), y);
     }
     endShape(CLOSE);
 
-    // 在第一組與第二組之間充滿綠色
-    fill(0, 255, 0, 150); // 半透明綠色
+    // 綠色區域
+    fill(0, 255, 0, 150);
     noStroke();
     beginShape();
-    // 先畫第一組
     for (let i = 0; i < indices.length; i++) {
       const idx = indices[i];
       const [x, y] = keypoints[idx];
-      vertex(x, y);
+      vertex(mirrorX(x), y);
     }
-    // 再畫第二組（反向，避免交錯）
     for (let i = indices2.length - 1; i >= 0; i--) {
       const idx = indices2[i];
       const [x, y] = keypoints[idx];
-      vertex(x, y);
+      vertex(mirrorX(x), y);
     }
     endShape(CLOSE);
 
-    // 畫左眼綠色線條
+    // 左眼
     const leftEyeIndices = [243,190,56,28,27,29,30,247,130,25,110,24,23,22,26,112];
-    stroke(0, 255, 0); // 綠色
+    stroke(0, 255, 0);
     strokeWeight(2);
     noFill();
     for (let i = 0; i < leftEyeIndices.length - 1; i++) {
@@ -85,27 +84,27 @@ function draw() {
       const idx2 = leftEyeIndices[i + 1];
       const [x1, y1] = keypoints[idx1];
       const [x2, y2] = keypoints[idx2];
-      line(x1, y1, x2, y2);
+      line(mirrorX(x1), y1, mirrorX(x2), y2);
     }
-    // 收尾連回起點
+    // 收尾
     const [xStart, yStart] = keypoints[leftEyeIndices[0]];
     const [xEnd, yEnd] = keypoints[leftEyeIndices[leftEyeIndices.length - 1]];
-    line(xEnd, yEnd, xStart, yStart);
+    line(mirrorX(xEnd), yEnd, mirrorX(xStart), yStart);
 
     // 左眼紅色填滿
     noStroke();
-    fill(255, 0, 0, 180); // 半透明紅色
+    fill(255, 0, 0, 180);
     beginShape();
     for (let i = 0; i < leftEyeIndices.length; i++) {
       const idx = leftEyeIndices[i];
       const [x, y] = keypoints[idx];
-      vertex(x, y);
+      vertex(mirrorX(x), y);
     }
     endShape(CLOSE);
-    
-    // 畫右眼綠色線條
+
+    // 右眼
     const rightEyeIndices = [263,466,388,387,386,385,384,398,362,382,381,380,374,373,390,249];
-    stroke(0, 255, 0); // 綠色
+    stroke(0, 255, 0);
     strokeWeight(2);
     noFill();
     for (let i = 0; i < rightEyeIndices.length - 1; i++) {
@@ -113,21 +112,20 @@ function draw() {
       const idx2 = rightEyeIndices[i + 1];
       const [x1, y1] = keypoints[idx1];
       const [x2, y2] = keypoints[idx2];
-      line(x1, y1, x2, y2);
+      line(mirrorX(x1), y1, mirrorX(x2), y2);
     }
-    // 收尾連回起點
     const [rxStart, ryStart] = keypoints[rightEyeIndices[0]];
     const [rxEnd, ryEnd] = keypoints[rightEyeIndices[rightEyeIndices.length - 1]];
-    line(rxEnd, ryEnd, rxStart, ryStart);
+    line(mirrorX(rxEnd), ryEnd, mirrorX(rxStart), ryStart);
 
     // 右眼紅色填滿
     noStroke();
-    fill(255, 0, 0, 180); // 半透明紅色
+    fill(255, 0, 0, 180);
     beginShape();
     for (let i = 0; i < rightEyeIndices.length; i++) {
       const idx = rightEyeIndices[i];
       const [x, y] = keypoints[idx];
-      vertex(x, y);
+      vertex(mirrorX(x), y);
     }
     endShape(CLOSE);
   }
