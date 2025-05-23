@@ -70,5 +70,48 @@ function draw() {
       vertex(x, y);
     }
     endShape(CLOSE);
+
+        // ...existing code...
+    
+        // 畫左眼綠色線條
+        const leftEyeIndices = [243,190,56,28,27,29,30,247,130,25,110,24,23,22,26,112];
+        stroke(0, 255, 0); // 綠色
+        strokeWeight(2);
+        noFill();
+        for (let i = 0; i < leftEyeIndices.length - 1; i++) {
+          const idx1 = leftEyeIndices[i];
+          const idx2 = leftEyeIndices[i + 1];
+          const [x1, y1] = keypoints[idx1];
+          const [x2, y2] = keypoints[idx2];
+          line(x1, y1, x2, y2);
+        }
+        // 收尾連回起點
+        const [xStart, yStart] = keypoints[leftEyeIndices[0]];
+        const [xEnd, yEnd] = keypoints[leftEyeIndices[leftEyeIndices.length - 1]];
+        line(xEnd, yEnd, xStart, yStart);
+    
+        // 左眼紅色填滿
+        noStroke();
+        fill(255, 0, 0, 180); // 半透明紅色
+        beginShape();
+        for (let i = 0; i < leftEyeIndices.length; i++) {
+          const idx = leftEyeIndices[i];
+          const [x, y] = keypoints[idx];
+          vertex(x, y);
+        }
+        endShape(CLOSE);
+
+                // 左眼紅色填滿
+        noStroke();
+        fill(255, 0, 0, 180); // 半透明紅色
+        beginShape();
+        for (let i = 0; i < leftEyeIndices.length; i++) {
+          const idx = leftEyeIndices[i];
+          const [x, y] = keypoints[idx];
+          vertex(x, y);
+        }
+        endShape(CLOSE);
+    
+    // ...existing code...
   }
 }
